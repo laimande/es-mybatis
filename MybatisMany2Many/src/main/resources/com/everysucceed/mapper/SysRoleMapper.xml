@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everysucceed.mapper.SysRoleMapper">
+
+    <resultMap id="roleResourceMap" type="com.everysucceed.entity.SysRole">
+        <id column="id" property="id"></id>
+        <result column="role_name" property="roleName"></result>
+        <result column="remark" property="remark"></result>
+        <collection property="resources" select="getResourceByRole" ofType="com.everysucceed.entity.SysResource" column="id">
+        </collection>
+    </resultMap>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="sysRole">
+        insert into sys_role(role_name,remark) values (#{roleName},#{remark})
+    </insert>
+
+    <delete id="revoke" parameterType="sysRole">
+        delete from sys_role_resource where rid=#{id}
+    </delete>
+
+    <insert id="grand" parameterType="sysRole">
+        insert into sys_role_resource(rid,res_id) values
+        <foreach collection="resources" item="item" open="" close="" separator="," >
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <select id="list" resultType="com.everysucceed.entity.SysRole">
+        select * from sys_role
+    </select>
+
+    <select id="get" resultMap="roleResourceMap">
+        select role_name,remark,id from sys_role where id=#{id}
+    </select>
+
+    <select id="getResourceByRole" parameterType="int" resultType="com.everysucceed.entity.SysResource">
+        SELECT
+        rid,res_id id,name,url,icon,remark,type
+        FROM
+        sys_role_resource s
+        LEFT JOIN sys_resource r ON s.res_id = r.id
+        WHERE
+        s.rid = #{rid}
+    </select>
+</mapper>

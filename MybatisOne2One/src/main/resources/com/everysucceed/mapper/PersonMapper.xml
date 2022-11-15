@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everysucceed.mapper.PersonMapper">
+    <!--联合查询-->
+    <resultMap id="personMap" type="com.everysucceed.entity.Person">
+
+        <id column="id" property="id"></id>
+
+        <result property="name" column="name"></result>
+
+        <!--复合类型-->
+        <association property="idCard" javaType="com.everysucceed.entity.IdCard">
+            <id property="id" column="id_card_id"></id>
+            <result property="expDateEnd" column="exp_date_end"></result>
+            <result property="expDateStart" column="exp_date_start"></result>
+        </association>
+
+    </resultMap>
+
+
+    <!--分步查询的方式-->
+    <resultMap id="personByStep" type="com.everysucceed.entity.Person">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+
+        <!--这个属性，是一个查询语句 在这个位置再次发送一次查询
+            select： 写查询语句的id的
+        -->
+        <association
+                property="idCard"
+                javaType="com.everysucceed.entity.IdCard"
+                select="com.everysucceed.mapper.IdCardMapper.get"
+                column="id_card_id" fetchType="lazy">
+        </association>
+    </resultMap>
+
+    <select id="get" parameterType="int" resultMap="personMap">
+        SELECT
+            p.id,
+            p.id_card_id,
+            p.`name`,
+            i.exp_date_end,
+            i.exp_date_start
+        FROM
+            person p,
+            id_card i
+        WHERE
+            p.id_card_id = i.id
+    </select>
+
+
+    <select id="getByStep" parameterType="int" resultMap="personByStep">
+        select id,name,id_card_id from person
+    </select>
+</mapper>

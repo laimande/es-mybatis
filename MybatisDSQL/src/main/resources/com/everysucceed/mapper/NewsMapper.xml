@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everysucceed.mapper.NewsMapper">
+
+    <select id="list" resultType="news" parameterType="news">
+        select * from news
+        <where>
+            <if test="author != null">
+                and author like #{author}
+            </if>
+
+            <if test="publishDate != null ">
+                and publish_date >= #{publishDate}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="news">
+
+        update news
+        <set>
+            <if test="title!=null">,title=#{title}</if>
+            <if test="author!=null">,author=#{author}</if>
+        </set>
+        where id=#{id}
+
+    </update>
+
+</mapper>

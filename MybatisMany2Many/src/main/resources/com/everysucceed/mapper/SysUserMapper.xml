@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everysucceed.mapper.SysUserMapper">
+
+
+
+    <resultMap id="userResultMap" type="com.everysucceed.entity.SysUser">
+        <id column="id" property="id"></id>
+        <result column="username" property="username"></result>
+        <result property="password" column="password"></result>
+        <collection property="roles" select="selectRoleByUserId" ofType="com.everysucceed.entity.SysRole" column="id"></collection>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" parameterType="sysUser" keyColumn="id" keyProperty="id">
+        insert into sys_user(username,password) values(#{username},#{password})
+    </insert>
+
+    <insert id="grand" parameterType="sysUser">
+        insert into sys_user_role(uid,rid) values
+        <foreach collection="roles" item="item" separator="," open="" close="">
+            (#{id},#{item.id})
+        </foreach>
+    </insert>
+
+    <delete id="revoke" parameterType="sysUser">
+        delete from sys_user_role where uid=#{id}
+    </delete>
+
+    <select id="list" resultType="com.everysucceed.entity.SysUser">
+        select * from sys_user
+    </select>
+
+    <select id="get"  resultMap="userResultMap" parameterType="int">
+        select * from sys_user where id=#{id}
+    </select>
+
+    <select id="selectRoleByUserId" resultType="sysRole" parameterType="int">
+        SELECT
+        uid,rid id,role_name,remark
+        FROM
+        sys_user_role s
+        LEFT JOIN sys_role r ON s.rid = r.id
+        WHERE
+        s.uid = #{uid}
+    </select>
+</mapper>
+

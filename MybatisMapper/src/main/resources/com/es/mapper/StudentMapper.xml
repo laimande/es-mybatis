@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.es.mapper.StudentMapper">
+
+    <insert id="save" parameterType="student">
+        insert into student(id,name,birthday,address,phone) values (null,#{name},#{birthday},#{address},#{phone})
+    </insert>
+    <update id="update">
+        update student set name=#{name},birthday=#{birthday},address=#{address},phone=#{phone} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from student where id = #{id}
+    </delete>
+
+    <select id="list" resultType="student">
+        select id,name,address,birthday,phone from student
+    </select>
+
+    <select id="get" resultType="student" parameterType="int">
+        select id,name,address,birthday,phone from student where id = #{id}
+    </select>
+
+    <select id="listByCondition" resultType="student">
+        select  id,name,address,birthday,phone from student  where name like #{name} and  phone like #{phone}
+    </select>
+
+
+ </mapper>

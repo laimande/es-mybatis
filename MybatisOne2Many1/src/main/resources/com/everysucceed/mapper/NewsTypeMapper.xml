@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.everysucceed.mapper.NewsTypeMapper">
+
+    <!--one2many 联合查询-->
+    <resultMap id="one2maneJoin" type="com.everysucceed.entity.NewsType">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="remark" property="remark"></result>
+
+        <!--集合-->
+        <collection property="newsList" ofType="com.everysucceed.entity.News">
+            <id property="id" column="nid"></id>
+            <result column="title" property="title"></result>
+            <result column="content" property="content"></result>
+            <result column="author" property="author"></result>
+            <result column="publish_date" property="publishDate"></result>
+        </collection>
+    </resultMap>
+
+    <!--one2many 分步-->
+    <resultMap id="newsTypeStep" type="com.everysucceed.entity.NewsType">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="remark" property="remark"></result>
+
+        <!--集合的元素来自于一个查询-->
+        <collection
+                property="newsList"
+                ofType="com.everysucceed.entity.News"
+                select="com.everysucceed.mapper.NewsMapper.listByType"
+                column="id"
+                fetchType="lazy"
+        ></collection>
+    </resultMap>
+
+    <select id="get" resultType="newsType" parameterType="int">
+        select id,name,remark from news_type where id=#{id}
+    </select>
+
+
+    <select id="getOne2Many" resultMap="one2maneJoin" parameterType="int">
+        SELECT
+            n.id nid,
+            n.title,
+            n.content,
+            n.author,
+            n.publish_date,
+            n.news_type,
+            t.id ,
+            t.`name`,
+            t.remark
+        FROM
+            news n,
+            news_type t
+        WHERE
+            n.news_type = t.id
+            and t.id = #{id};
+    </select>
+
+    <!--分步查询-->
+    <select id="getOne2ManyStep" resultMap="newsTypeStep" parameterType="int">
+        select id,name,remark from news_type where id=#{id}
+    </select>
+
+
+
+
+</mapper>

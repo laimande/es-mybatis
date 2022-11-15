@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.mapper.StudentMapper">
+    <select id="list" parameterType="student" resultType="student">
+        select * from student
+        <where>
+            <if test="name!=null  and name!=''">
+                and name like '%${name}%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like '%${phone}%'
+            </if>
+            <if test="address!=null and address!=''">
+                and address like '%${address}%'
+            </if>
+            <if test="birthdayStart!=null and birthdayEnd!=null">
+                and birthday between #{birthdayStart} and #{birthdayEnd}
+            </if>
+
+        </where>
+    </select>
+</mapper>

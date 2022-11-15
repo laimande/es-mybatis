@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.everysucceed.mapper.TbGoodsMapper">
+    
+    <resultMap id="tbGoodsMap" type="com.everysucceed.entity.TbGoods">
+        <id property="dataId" column="data_id"></id>
+        <result property="goodsName" column="goods_name"></result>
+        <result property="goodsPrice" column="goods_price"></result>
+        <result property="goodsMerchant" column="goods_merchant"></result>
+        <result property="goodsDesc" column="goods_desc"></result>
+        <result property="teJia" column="s_price"></result>
+    </resultMap>
+    <!--
+    <select id="list" resultType="tbGoods">
+        SELECT
+            data_id dataId,
+            goods_name GoodsName,
+            goods_price goodsPrice,
+            goods_merchant goodsMerchant,
+            goods_desc goodsDesc,
+            s_price teJia
+        FROM
+            tb_goods
+    </select>
+    -->
+    <select id="list" resultMap="tbGoodsMap">
+        SELECT
+            *
+        FROM
+        tb_goods
+    </select>
+    <select id="listGoods"  resultType="tbGoods">
+        select * from tb_goods
+    </select>
+
+    <select id="get" parameterType="long" resultMap="tbGoodsMap">
+       select * from tb_goods where data_id = #{id}
+    </select>
+</mapper>

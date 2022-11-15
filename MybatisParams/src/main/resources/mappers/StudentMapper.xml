@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.es.mapper.StudentMapper">
+    <select id="list" resultType="com.es.entity.Student">
+        select id,name,birthday,address,phone from student
+    </select>
+
+    <!--
+    <select id="get" resultType="com.es.entity.Student" parameterType="java.lang.String">
+        select id,name,birthday,address,phone from student where id = #{value}
+    </select>
+    -->
+    <select id="get" resultType="student" parameterType="int">
+        select id,name,birthday,address,phone from student where id = #{value}
+    </select>
+
+    <select id="listByName" resultType="student" parameterType="string">
+        select id,name,birthday,address,phone from student where name like #{value}
+    </select>
+
+    <select id="getByDate" resultType="student" parameterType="date">
+        select * from student where birthday=#{value}
+    </select>
+
+    <select id="getByStudent" resultType="student" parameterType="student">
+        select * from student where name like #{name} and phone like #{phone}
+    </select>
+
+    <select id="getByDateRange" resultType="student" parameterType="map">
+        select * from student where birthday between #{start} and  #{end}
+    </select>
+</mapper>
