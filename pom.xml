@@ -14,7 +14,7 @@
     <module>MybatisParams</module>
     <module>MybatisMapper</module>
     <module>MybatisUtils</module>
-    <module>MybatisMapperAnnotaion</module>
+    <module>MybatisMapperAnnotation</module>
     <module>SIM</module>
     <module>MybatisResultMap</module>
     <module>MybatisOne2One</module>
